@@ -1,0 +1,20 @@
+# Data
+data/raw/
+data/backups/
+*.db
+*.csv
+
+# Environment
+.env
+.venv
+env/
+
+# Logs
+logs/*.log
+*.log
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd

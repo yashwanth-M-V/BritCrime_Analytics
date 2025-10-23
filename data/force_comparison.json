@@ -1,0 +1,67 @@
+{
+  "metropolitan": {
+    "columns": [
+      "category",
+      "location_type",
+      "context",
+      "outcome_status",
+      "persistent_id",
+      "id",
+      "location_subtype",
+      "month",
+      "location.latitude",
+      "location.street.id",
+      "location.street.name",
+      "location.longitude",
+      "outcome_status.category",
+      "outcome_status.date"
+    ],
+    "shape": [
+      1609,
+      14
+    ]
+  },
+  "west-midlands": {
+    "columns": [
+      "category",
+      "location_type",
+      "context",
+      "outcome_status",
+      "persistent_id",
+      "id",
+      "location_subtype",
+      "month",
+      "location.latitude",
+      "location.street.id",
+      "location.street.name",
+      "location.longitude",
+      "outcome_status.category",
+      "outcome_status.date"
+    ],
+    "shape": [
+      499,
+      14
+    ]
+  },
+  "greater-manchester": {
+    "columns": [
+      "category",
+      "location_type",
+      "context",
+      "persistent_id",
+      "id",
+      "location_subtype",
+      "month",
+      "location.latitude",
+      "location.street.id",
+      "location.street.name",
+      "location.longitude",
+      "outcome_status.category",
+      "outcome_status.date"
+    ],
+    "shape": [
+      1,
+      13
+    ]
+  }
+}
