@@ -1,306 +1,213 @@
+#!/usr/bin/env python3
+"""
+Header Component - Professional header with inline filters
+"""
+
 import streamlit as st
+import pandas as pd
 from datetime import datetime
 
-def create_header():
-    # --- CSS for professional styling and sticky header ---
-    st.markdown("""
-        <style>
-            [data-testid="stSidebar"] {display: none;}
-            [data-testid="stHeader"] {display: none;}
-            
-            /* Main container padding to account for fixed header */
-            .main .block-container {
-                padding-top: 0rem;
-            }
-            
-            /* Sticky header container */
-            .sticky-header {
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                z-index: 999;
-                background-color: white;
-                padding: 15px 0px 5px 0px;
-                box-shadow: 0 2px 12px rgba(0,0,0,0.1);
-                border-bottom: 1px solid #e0e0e0;
-            }
-            
-            /* Header container width matching Streamlit */
-            .header-container {
-                max-width: 100%;
-                padding: 0 1rem;
-            }
-            
-            /* Navigation tiles */
-            .nav-tile {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                border: 1px solid #e0e0e0;
-                border-radius: 8px;
-                padding: 12px 8px;
-                margin: 4px 2px;
-                background-color: #f8f9fa;
-                transition: all 0.3s ease;
-                text-decoration: none;
-                color: #333;
-                font-weight: 500;
-                font-size: 0.85em;
-                width: 100%;
-                min-height: 70px;
-                text-align: center;
-                cursor: pointer;
-            }
-            
-            .nav-tile:hover {
-                background-color: #e9ecef;
-                border-color: #495057;
-                transform: translateY(-2px);
-            }
-            
-            .nav-tile.active {
-                background-color: #2c3e50;
-                color: white;
-                border-color: #2c3e50;
-                font-weight: 600;
-            }
-            
-            .tile-icon {
-                font-size: 20px;
-                margin-bottom: 4px;
-            }
-            
-            .tile-title {
-                font-size: 0.75em;
-                font-weight: 500;
-                margin: 0;
-            }
-            
-            .tile-page {
-                font-size: 0.7em;
-                color: #666;
-                margin-top: 2px;
-                margin: 0;
-            }
-            
-            .nav-tile.active .tile-page {
-                color: #e0e0e0;
-            }
-            
-            /* UK Map and Police symbol containers */
-            .symbol-container {
-                border: 1px solid #e0e0e0;
-                border-radius: 8px;
-                background-color: #f8f9fa;
-                padding: 15px 10px;
-                text-align: center;
-                height: 100px;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-            }
-            
-            .symbol-icon {
-                font-size: 32px;
-                margin-bottom: 8px;
-            }
-            
-            .symbol-label {
-                font-size: 0.8em;
-                color: #666;
-                font-weight: 500;
-            }
-            
-            /* Main title styling */
-            .main-title {
-                text-align: center;
-                color: #2c3e50;
-                font-weight: 700;
-                font-size: 2.2em;
-                margin: 0;
-                padding: 0;
-            }
-            
-            .last-updated {
-                text-align: center;
-                color: #7f8c8d;
-                font-size: 0.85em;
-                margin: 0;
-                padding: 0;
-            }
-            
-            /* Filter section */
-            .filter-section {
-                background-color: #f8f9fa;
-                border-radius: 8px;
-                padding: 15px;
-                margin: 10px 0;
-                border: 1px solid #e0e0e0;
-            }
-            
-            .filter-title {
-                color: #2c3e50;
-                font-weight: 600;
-                margin-bottom: 12px;
-                font-size: 1em;
-            }
-            
-            /* Custom button styling to look like tiles */
-            .nav-button-container {
-                width: 100%;
-            }
-            
-            .nav-button-container button {
-                width: 100%;
-                height: 80px;
-                border: 1px solid #e0e0e0;
-                border-radius: 8px;
-                background-color: #f8f9fa;
-                transition: all 0.3s ease;
-            }
-            
-            .nav-button-container button:hover {
-                background-color: #e9ecef;
-                border-color: #495057;
-                transform: translateY(-2px);
-            }
-            
-            .nav-button-container button[data-active="true"] {
-                background-color: #2c3e50;
-                color: white;
-                border-color: #2c3e50;
-            }
-        </style>
-    """, unsafe_allow_html=True)
+def create_header(loaded_data):
+    """
+    Create professional header with inline filters
+    """
+    # Header with logo placeholders and title
+    col_logo_left, col_title, col_logo_right = st.columns([1, 3, 1])
+    
+    with col_logo_left:
+        # UK Flag placeholder
+        st.markdown(
+            """
+            <div class="logo-placeholder">
+                <div style='font-size: 32px; margin-bottom: 5px;'>🇬🇧</div>
+                <div style='font-size: 12px; color: #666;'>UK Flag</div>
+            </div>
+            """, 
+            unsafe_allow_html=True
+        )
+    
+    with col_title:
+        # Main title
+        st.markdown(
+            """
+            <h1 class="main-title">UK CRIME ANALYTICS</h1>
+            """, 
+            unsafe_allow_html=True
+        )
+        
+        # Last updated information
+        display_date = get_last_updated_date(loaded_data)
+        st.markdown(
+            f"""
+            <p class="last-updated">
+                📅 Last Updated: {display_date} | 
+                📊 {get_total_records(loaded_data):,} Records Loaded
+            </p>
+            """, 
+            unsafe_allow_html=True
+        )
+    
+    with col_logo_right:
+        # Police logo placeholder
+        st.markdown(
+            """
+            <div class="logo-placeholder">
+                <div style='font-size: 32px; margin-bottom: 5px;'>👮</div>
+                <div style='font-size: 12px; color: #666;'>Police Logo</div>
+            </div>
+            """, 
+            unsafe_allow_html=True
+        )
+    
+    # Divider with better styling
+    st.markdown(
+        "<hr style='height: 2px; background: linear-gradient(90deg, #1f77b4, #ff7f0e); border: none; margin: 20px 0;'>", 
+        unsafe_allow_html=True
+    )
+    
+    # Filters section
+    return create_inline_filters(loaded_data)
 
-    # --- Start Sticky Header Container ---
-    st.markdown("<div class='sticky-header'>", unsafe_allow_html=True)
-    st.markdown("<div class='header-container'>", unsafe_allow_html=True)
+def get_last_updated_date(loaded_data):
+    """Extract and format the last updated date"""
+    if 'crime_incidents' in loaded_data and not loaded_data['crime_incidents'].empty:
+        latest_date = loaded_data['crime_incidents']['date_loaded'].max()
+        if pd.notna(latest_date):
+            # Handle different date formats
+            if ' ' in str(latest_date):
+                return latest_date.split()[0]
+            else:
+                return latest_date
+    return "Loading..."
 
-    # --- HEADER ROW: UK Map - Title - Police Symbol ---
-    col1, col2, col3 = st.columns([2, 6, 2])
+def get_total_records(loaded_data):
+    """Get total number of crime incidents"""
+    if 'crime_incidents' in loaded_data and not loaded_data['crime_incidents'].empty:
+        return len(loaded_data['crime_incidents'])
+    return 0
 
+def create_inline_filters(loaded_data):
+    """
+    Create inline filter controls in main content area
+    """
+    st.markdown(
+        """
+        <div class="filter-section">
+            <h3 style='margin-bottom: 20px; color: #1f77b4;'>🔍 Data Filters</h3>
+        </div>
+        """, 
+        unsafe_allow_html=True
+    )
+    
+    # Create 4 columns for filters
+    col1, col2, col3, col4 = st.columns(4)
+    
+    filters = {}
+    
     with col1:
-        st.markdown("""
-        <div class='symbol-container'>
-            <div class='symbol-icon'>🗺️</div>
-            <div class='symbol-label'>UK Map</div>
-        </div>
-        """, unsafe_allow_html=True)
-
+        st.markdown("**Police Force**")
+        if 'police_forces' in loaded_data and not loaded_data['police_forces'].empty:
+            force_options = ["All Forces"] + loaded_data['police_forces']['force_name'].tolist()
+            selected_force = st.selectbox(
+                "police_force_selector",
+                options=force_options,
+                index=0,
+                help="Select specific police force or view all",
+                label_visibility="collapsed"
+            )
+            filters['force'] = selected_force
+        else:
+            st.selectbox(
+                "Police Force", 
+                ["Loading data..."], 
+                disabled=True,
+                label_visibility="collapsed"
+            )
+            filters['force'] = "All Forces"
+    
     with col2:
-        st.markdown("<h1 class='main-title'>UK CRIME ANALYTICS</h1>", unsafe_allow_html=True)
-        st.markdown(f"<p class='last-updated'>Last Updated: {datetime.now().strftime('%d %B %Y')}</p>", 
-                    unsafe_allow_html=True)
-
+        st.markdown("**Time Period**")
+        if 'crime_incidents' in loaded_data and not loaded_data['crime_incidents'].empty:
+            date_options = ["All Months"] + sorted(loaded_data['crime_incidents']['month'].unique(), reverse=True)
+            selected_dates = st.multiselect(
+                "month_selector",
+                options=date_options,
+                default=["All Months"],
+                help="Select specific months or view all data",
+                label_visibility="collapsed"
+            )
+            # Convert "All Months" to actual dates
+            if "All Months" in selected_dates or not selected_dates:
+                filters['dates'] = date_options[1:]  # All actual dates
+            else:
+                filters['dates'] = selected_dates
+        else:
+            st.multiselect(
+                "Months", 
+                ["Loading data..."], 
+                disabled=True,
+                label_visibility="collapsed"
+            )
+            filters['dates'] = []
+    
     with col3:
-        st.markdown("""
-        <div class='symbol-container'>
-            <div class='symbol-icon'>👮</div>
-            <div class='symbol-label'>Police Symbol</div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    # --- NAVIGATION TILES (5 pages) ---
+        st.markdown("**Crime Types**")
+        if 'crime_categories' in loaded_data and not loaded_data['crime_categories'].empty:
+            crime_options = ["All Crime Types"] + loaded_data['crime_categories']['category_name'].tolist()
+            selected_crimes = st.multiselect(
+                "crime_type_selector",
+                options=crime_options,
+                default=["All Crime Types"],
+                help="Select specific crime types or view all",
+                label_visibility="collapsed"
+            )
+            # Convert "All Crime Types" to actual crimes
+            if "All Crime Types" in selected_crimes or not selected_crimes:
+                filters['crimes'] = crime_options[1:]  # All actual crimes
+            else:
+                filters['crimes'] = selected_crimes
+        else:
+            st.multiselect(
+                "Crime Types", 
+                ["Loading data..."], 
+                disabled=True,
+                label_visibility="collapsed"
+            )
+            filters['crimes'] = []
+    
+    with col4:
+        st.markdown("**Severity Level**")
+        severity_options = ["All Levels", "Low (1-2)", "Medium (3)", "High (4-5)"]
+        selected_severity = st.selectbox(
+            "severity_selector",
+            options=severity_options,
+            index=0,
+            help="Filter by crime severity level",
+            label_visibility="collapsed"
+        )
+        filters['severity'] = selected_severity
+    
+    # Quick stats below filters
+    if loaded_data.get('crime_incidents', pd.DataFrame()).empty == False:
+        total_incidents = len(loaded_data['crime_incidents'])
+        date_range = f"{loaded_data['crime_incidents']['month'].min()} to {loaded_data['crime_incidents']['month'].max()}"
+        
+        st.markdown(
+            f"""
+            <div style='background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); 
+                        padding: 15px; border-radius: 10px; margin: 10px 0; 
+                        border-left: 4px solid #1976d2;'>
+                <div style='font-size: 14px; color: #1565c0;'>
+                    📈 <strong>Dataset Summary:</strong> {total_incidents:,} incidents across {date_range}
+                </div>
+            </div>
+            """, 
+            unsafe_allow_html=True
+        )
+    
+    # Add some spacing before next section
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # Define navigation items
-    nav_items = [
-        {"id": "Overview", "icon": "📊", "title": "Overview", "page": "Page 1"},
-        {"id": "Hotspots Map", "icon": "📍", "title": "Hotspots Map", "page": "Page 2"},
-        {"id": "Trends Analysis", "icon": "📈", "title": "Trends Analysis", "page": "Page 3"},
-        {"id": "Case Outcomes", "icon": "⚖️", "title": "Case Outcomes", "page": "Page 4"},
-        {"id": "Incident Detail", "icon": "🔍", "title": "Incident Detail", "page": "Page 5"}
-    ]
-    
-    # Create tiles using columns
-    cols = st.columns(5)
-    for i, item in enumerate(nav_items):
-        with cols[i]:
-            is_active = st.session_state.current_page == item["id"]
-            
-            # Create custom button with HTML styling
-            button_html = f"""
-            <div class="nav-button-container">
-                <button data-active="{str(is_active).lower()}" onclick="window.navigateToPage('{item['id']}')">
-                    <div style="font-size: 20px; margin-bottom: 4px;">{item['icon']}</div>
-                    <div style="font-size: 0.75em; font-weight: 500;">{item['title']}</div>
-                    <div style="font-size: 0.7em; color: {'#e0e0e0' if is_active else '#666'};">{item['page']}</div>
-                </button>
-            </div>
-            """
-            st.markdown(button_html, unsafe_allow_html=True)
-            
-            # Add JavaScript for navigation
-            st.markdown(f"""
-            <script>
-            window.navigateToPage = function(pageId) {{
-                // This will trigger a Streamlit rerun with the new page
-                const event = new CustomEvent('navigate', {{ detail: {{ page: pageId }} }});
-                document.dispatchEvent(event);
-            }}
-            
-            // Handle navigation events
-            document.addEventListener('navigate', function(e) {{
-                // This would typically update Streamlit session state
-                // For now, we'll use a workaround with query parameters
-                window.location.href = `?page=${{e.detail.page}}`;
-            }});
-            </script>
-            """, unsafe_allow_html=True)
-            
-            # Streamlit button as fallback (hidden but functional)
-            if st.button(
-                f"Navigate to {item['title']}",
-                key=f"nav_{item['id']}",
-                use_container_width=True,
-                type="secondary"
-            ):
-                st.session_state.current_page = item["id"]
-                st.rerun()
+    return filters
 
-    # --- FILTERS SECTION ---
-    st.markdown("<div class='filter-section'>", unsafe_allow_html=True)
-    st.markdown("<div class='filter-title'>🔍 Data Filters</div>", unsafe_allow_html=True)
     
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        police_force = st.selectbox(
-            "Police Force", 
-            ["All Forces", "Metropolitan", "West Yorkshire", "Greater Manchester"],
-            key="header_police"
-        )
-    with col2:
-        month = st.selectbox(
-            "Month", 
-            ["All", "January", "February", "March", "April", "May", "June"],
-            key="header_month"
-        )
-    with col3:
-        crime_type = st.selectbox(
-            "Crime Type", 
-            ["All Types", "Violence", "Burglary", "Fraud", "Theft", "Robbery"],
-            key="header_crime"
-        )
-    with col4:
-        severity = st.selectbox(
-            "Severity Level", 
-            ["All Levels", "Low", "Medium", "High", "Critical"],
-            key="header_severity"
-        )
-    
-    st.markdown("</div>", unsafe_allow_html=True)
-
-    st.markdown("</div>", unsafe_allow_html=True)  # Close header-container
-    st.markdown("</div>", unsafe_allow_html=True)  # Close sticky-header
-
-    # Return filter values
-    return {
-        "police_force": police_force,
-        "month": month,
-        "crime_type": crime_type,
-        "severity": severity
-    }

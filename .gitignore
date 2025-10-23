@@ -3,6 +3,7 @@ data/raw/
 data/backups/
 *.db
 *.csv
+.streamlit/secrets.toml
 
 # Environment
 .env
@@ -18,3 +19,6 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+
+
+

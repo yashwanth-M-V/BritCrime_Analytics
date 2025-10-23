@@ -9,8 +9,8 @@ from azure.storage.blob import BlobServiceClient
 import os
 import io
 
-@st.cache_data(ttl=3600)  # Cache for 1 hour
-def load_data_from_azure():
+@st.cache_data(ttl=3600)
+def load_data_from_azure(verbose=False):
     """
     Load all datasets from Azure Blob Storage
     Returns dictionary of DataFrames
@@ -59,7 +59,12 @@ def load_data_from_azure():
                 df = pd.read_csv(io.BytesIO(content))
                 loaded_data[data_name] = df
                 
-                st.success(f"Loaded {data_name}: {len(df):,} records")
+                # Only show message if verbose mode is enabled
+                if verbose:
+                    st.success(f"Loaded {data_name}: {len(df):,} records")
+                else:
+                    # Log to console only (invisible to users)
+                    print(f"Loaded {data_name}: {len(df):,} records")
                 
             except Exception as e:
                 st.warning(f"Could not load {data_name}: {e}")
