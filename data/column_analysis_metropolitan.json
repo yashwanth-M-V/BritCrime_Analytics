@@ -1,0 +1,37 @@
+{
+  "force_id": "metropolitan",
+  "total_columns": 14,
+  "columns": [
+    "category",
+    "location_type",
+    "context",
+    "outcome_status",
+    "persistent_id",
+    "id",
+    "location_subtype",
+    "month",
+    "location.latitude",
+    "location.street.id",
+    "location.street.name",
+    "location.longitude",
+    "outcome_status.category",
+    "outcome_status.date"
+  ],
+  "data_types": {
+    "category": "object",
+    "location_type": "object",
+    "context": "object",
+    "outcome_status": "float64",
+    "persistent_id": "object",
+    "id": "int64",
+    "location_subtype": "object",
+    "month": "object",
+    "location.latitude": "object",
+    "location.street.id": "int64",
+    "location.street.name": "object",
+    "location.longitude": "object",
+    "outcome_status.category": "object",
+    "outcome_status.date": "object"
+  },
+  "sample_records": 1609
+}
